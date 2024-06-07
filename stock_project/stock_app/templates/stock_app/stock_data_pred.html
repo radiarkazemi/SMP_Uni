@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Stock for Prediction Data</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'stock_app/styles.css' %}">
+    <script>
+        function submitForm() {
+            document.getElementById("stockForm").submit();
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Stock Prediction Data</h1>
+        <form id="stockForm" method="post">
+            {% csrf_token %}
+            {{ form.ticker }}
+            {% if error %}
+                <div class="alert alert-danger mt-3">{{ error }}</div>
+            {% endif %}
+        </form>
+
+        {% if stock_data %}
+            <h2>Stock Data for {{ ticker }}</h2>
+            <div class="table-container">
+                <table class="table table-striped mt-3">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Jalali Date</th>
+                            <th>Gregorian Date</th>
+                            <th>Stock Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for entry in stock_data %}
+                            <tr>
+                                <td>{{ entry.Date }}</td>
+                                <td>{{ entry.Time }}</td>
+                                <td>{{ entry.jalali_date }}</td>
+                                <td>{{ entry.gregorian_date }}</td>
+                                <td>{{ entry.stock_value }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% if line_chart %}
+                <div class="chart-container">
+                    <h3 class="chart-title">Stock Value Over Time</h3>
+                    {{ line_chart|safe }}
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+    <footer>
+        &copy; {{ current_year }} Stock Prediction Inc.
+    </footer>
+</body>
+</html>
