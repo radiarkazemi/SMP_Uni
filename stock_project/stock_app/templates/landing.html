@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Prediction Application</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .navbar {
+            background-color: #007bff;
+        }
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .hero-section {
+            background-color: #007bff;
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+        .hero-section h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        .hero-section p {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+        }
+        .btn-custom {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            margin: 5px;
+        }
+        .features-section {
+            padding: 60px 0;
+            background-color: #fff;
+        }
+        .feature-card {
+            border: none;
+            transition: transform 0.3s ease-in-out;
+        }
+        .feature-card:hover {
+            transform: scale(1.05);
+        }
+        .feature-icon {
+            font-size: 3rem;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+        .footer {
+            background-color: #343a40;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+        .footer a {
+            color: #ffc107;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="#">Stock Prediction App</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'stock-data-uni' 'AAPL' %}">Stock Data</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'select-stock' %}">Predictions</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="hero-section">
+        <h1>Welcome to the Stock Prediction App</h1>
+        <p>Predict stock prices and view historical data</p>
+        <a class="btn btn-light btn-custom" href="{% url 'stock-data-uni' 'AAPL' %}" role="button">View Stock Data</a>
+        <a class="btn btn-success btn-custom" href="{% url 'select-stock' %}" role="button">View Predictions</a>
+    </div>
+
+    <div class="container features-section">
+        <div class="row text-center">
+            <div class="col-md-6 mb-4">
+                <div class="card feature-card">
+                    <div class="card-body">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h5 class="card-title">Stock Data</h5>
+                        <p class="card-text">View and analyze historical stock data to understand market trends and make informed decisions.</p>
+                        <a href="{% url 'stock-data-uni' 'AAPL' %}" class="btn btn-primary">View Stock Data</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card feature-card">
+                    <div class="card-body">
+                        <div class="feature-icon">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <h5 class="card-title">Predictions</h5>
+                        <p class="card-text">Get the latest stock price predictions and plan your investments with confidence.</p>
+                        <a href="{% url 'select-stock' %}" class="btn btn-success">View Predictions</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer mt-auto py-3">
+        <div class="container">
+            <span>&copy; 2024 Stock Prediction App. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></span>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,5 +1,4 @@
 import pandas as pd
-
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.views import View
@@ -123,3 +122,7 @@ class StockDataPredView(View):
                 fig, output_type='div', include_plotlyjs=True)
 
         return render(request, 'stock_app/stock_data_pred.html', context)
+
+
+def landing_page(request):
+    return render(request, 'landing.html')

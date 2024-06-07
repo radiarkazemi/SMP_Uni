@@ -1,0 +1,35 @@
+.hero-section {
+    background: url('../images/hero-bg.jpg') no-repeat center center/cover;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+}
+
+.about-section img {
+    max-width: 100%;
+    height: auto;
+}
+
+.features-section .col-md-4 {
+    padding: 20px;
+}
+
+.features-section .col-md-4 i {
+    color: #007bff;
+}
+
+.contact-section {
+    background: #f8f9fa;
+}
+
+.footer-section {
+    background: #343a40;
+    color: #fff;
+}
+
+.footer-section p {
+    margin: 0;
+}

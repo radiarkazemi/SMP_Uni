@@ -1,0 +1,57 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+}
+.navbar {
+    background-color: #007bff;
+}
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+.hero-section {
+    background-color: #007bff;
+    color: white;
+    padding: 100px 0;
+    text-align: center;
+}
+.hero-section h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+.hero-section p {
+    font-size: 1.2rem;
+    margin-bottom: 40px;
+}
+.btn-custom {
+    padding: 12px 30px;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    margin: 5px;
+}
+.features-section {
+    padding: 60px 0;
+    background-color: #fff;
+}
+.feature-card {
+    border: none;
+    transition: transform 0.3s ease-in-out;
+}
+.feature-card:hover {
+    transform: scale(1.05);
+}
+.feature-icon {
+    font-size: 3rem;
+    color: #007bff;
+    margin-bottom: 20px;
+}
+.footer {
+    background-color: #343a40;
+    color: white;
+    padding: 20px 0;
+}
+.footer a {
+    color: #ffc107;
+    text-decoration: none;
+}

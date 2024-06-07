@@ -5,8 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Select Stock for Prediction Data</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{% static 'stock_app/styles.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'stock_app/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script>
         function submitForm() {
             document.getElementById("stockForm").submit();
@@ -14,20 +15,41 @@
     </script>
 </head>
 <body>
-    <div class="container">
-        <h1>Stock Prediction Data</h1>
-        <form id="stockForm" method="post">
-            {% csrf_token %}
-            {{ form.ticker }}
-            {% if error %}
-                <div class="alert alert-danger mt-3">{{ error }}</div>
-            {% endif %}
-        </form>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="{% url 'landing' %}">Stock Prediction App</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'stock-data-uni' 'AAPL' %}">Stock Data</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'select-stock' %}">Predictions</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="jumbotron text-center">
+            <h1 class="display-4">Stock Prediction Data</h1>
+            <form id="stockForm" method="post" class="form-inline justify-content-center">
+                {% csrf_token %}
+                <div class="form-group mx-sm-3 mb-2">
+                    {{ form.ticker }}
+                </div>
+                {% if error %}
+                    <div class="alert alert-danger mt-3">{{ error }}</div>
+                {% endif %}
+            </form>
+        </div>
 
         {% if stock_data %}
-            <h2>Stock Data for {{ ticker }}</h2>
-            <div class="table-container">
-                <table class="table table-striped mt-3">
+            <h2 class="text-center">Stock Data for {{ ticker }}</h2>
+            <div class="table-responsive mt-4">
+                <table class="table table-striped">
                     <thead>
                         <tr>
                             <th>Date</th>
@@ -51,15 +73,22 @@
                 </table>
             </div>
             {% if line_chart %}
-                <div class="chart-container">
-                    <h3 class="chart-title">Stock Value Over Time</h3>
+                <div class="chart-container mt-5">
+                    <h3 class="text-center">Stock Value Over Time</h3>
                     {{ line_chart|safe }}
                 </div>
             {% endif %}
         {% endif %}
     </div>
-    <footer>
-        &copy; {{ current_year }} Stock Prediction Inc.
+
+    <footer class="footer mt-auto py-3 bg-dark text-white text-center">
+        <div class="container">
+            <span>&copy; 2024 Stock Prediction App. All rights reserved.</span>
+        </div>
     </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
