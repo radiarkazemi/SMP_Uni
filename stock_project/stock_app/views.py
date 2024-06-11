@@ -8,9 +8,17 @@ from django.shortcuts import render
 from .forms import StockTickerForm
 import plotly.graph_objs as go
 from plotly.offline import plot
+from django.core.mail import send_mail
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from .forms import ContactForm
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.forms import AuthenticationForm
+from django.shortcuts import redirect
+from .forms import RegisterForm
 
 
-class StockDataUniView(APIView):
+class StockDataUniView(View):
     def get(self, request, ticker):
         client = MongoClient('mongodb://localhost:27017/')
         db = client['SMP_uni']
@@ -18,7 +26,7 @@ class StockDataUniView(APIView):
 
         data = list(collection.find())
         if not data:
-            return Response({'error': 'No data found for this ticker in SMP_uni'}, status=404)
+            return render(request, 'stock_app/stock_data_uni.html', {'error': 'No data found for this ticker in SMP_uni'})
 
         df = pd.DataFrame(data)
         data_df = pd.json_normalize(df['data'])
@@ -32,9 +40,41 @@ class StockDataUniView(APIView):
         df.set_index('Date', inplace=True)
         df.reset_index(inplace=True)
 
-        serialized_data = StockDataUniSerializer(
-            df.to_dict('records'), many=True)
-        return Response(serialized_data.data)
+        context = {
+            'ticker': ticker,
+            'stock_data': df.to_dict('records'),
+            'stock_data_last_10_days': df.tail(10).to_dict('records')
+        }
+
+        # Create a line chart using Plotly
+        line_chart = go.Figure(data=[go.Scatter(
+            x=df['Date'],
+            y=df['Close'],
+            mode='lines',
+            name='Close Price'
+        )])
+        line_chart.update_layout(title=f'Close Price for {ticker}',
+                                 xaxis_title='Date',
+                                 yaxis_title='Close Price')
+
+        context['line_chart'] = plot(
+            line_chart, output_type='div', include_plotlyjs=True)
+
+        # Create a dot chart using Plotly
+        dot_chart = go.Figure(data=[go.Scatter(
+            x=df['Date'],
+            y=df['Close'],
+            mode='markers',
+            name='Close Price'
+        )])
+        dot_chart.update_layout(title=f'Close Price (Dot Chart) for {ticker}',
+                                xaxis_title='Date',
+                                yaxis_title='Close Price')
+
+        context['dot_chart'] = plot(
+            dot_chart, output_type='div', include_plotlyjs=True)
+
+        return render(request, 'stock_app/stock_data_uni.html', context)
 
 
 # Dictionary to map stock symbols to human-readable names
@@ -108,21 +148,83 @@ class StockDataPredView(View):
             context['stock_data'] = df.to_dict('records')
 
             # Create a line chart using Plotly
-            fig = go.Figure(data=[go.Scatter(
+            line_chart = go.Figure(data=[go.Scatter(
                 x=df['Date'],
                 y=df['stock_value'],
                 mode='lines',
                 name='Stock Value'
             )])
-            fig.update_layout(title=f'Stock Value for {context["ticker"]}',
-                              xaxis_title='Date',
-                              yaxis_title='Stock Value')
+            line_chart.update_layout(title=f'Stock Value for {context["ticker"]}',
+                                     xaxis_title='Date',
+                                     yaxis_title='Stock Value')
 
             context['line_chart'] = plot(
-                fig, output_type='div', include_plotlyjs=True)
+                line_chart, output_type='div', include_plotlyjs=True)
+
+            # Create a dot chart using Plotly
+            dot_chart = go.Figure(data=[go.Scatter(
+                x=df['Date'],
+                y=df['stock_value'],
+                mode='markers',
+                name='Stock Value'
+            )])
+            dot_chart.update_layout(title=f'Stock Value (Dot Chart) for {context["ticker"]}',
+                                    xaxis_title='Date',
+                                    yaxis_title='Stock Value')
+
+            context['dot_chart'] = plot(
+                dot_chart, output_type='div', include_plotlyjs=True)
 
         return render(request, 'stock_app/stock_data_pred.html', context)
 
 
 def landing_page(request):
-    return render(request, 'landing.html')
+    return render(request, 'stock_app/landing.html')
+
+
+def contact(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            message = form.cleaned_data['message']
+            send_mail(
+                f'Message from {name}',
+                message,
+                email,
+                ['your_email@example.com'],
+                fail_silently=False,
+            )
+            return HttpResponseRedirect(reverse('contact-success'))
+    else:
+        form = ContactForm()
+
+    return render(request, 'stock_app/contact.html', {'form': form})
+
+
+def register(request):
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('landing')
+    else:
+        form = RegisterForm()
+    return render(request, 'stock_app/register.html', {'form': form})
+
+
+def user_login(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('landing')
+    else:
+        form = AuthenticationForm()
+    return render(request, 'stock_app/login.html', {'form': form})

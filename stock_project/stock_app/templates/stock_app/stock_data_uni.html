@@ -1,0 +1,46 @@
+{% extends 'stock_app/base.html' %}
+
+{% block title %}داده‌های سهام{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+    {% else %}
+    <!-- Stock Data Display -->
+    <div class="section stock-data">
+        <h2>داده‌های {{ ticker }}</h2>
+        <div class="chart-container">
+            {{ line_chart|safe }}
+        </div>
+        <div class="chart-container">
+            {{ dot_chart|safe }}
+        </div>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>تاریخ</th>
+                    <th>قیمت باز</th>
+                    <th>قیمت بالا</th>
+                    <th>قیمت پایین</th>
+                    <th>قیمت بسته</th>
+                    <th>حجم معاملات</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data in stock_data_last_10_days %}
+                <tr>
+                    <td>{{ data.Date }}</td>
+                    <td>{{ data.Open }}</td>
+                    <td>{{ data.High }}</td>
+                    <td>{{ data.Low }}</td>
+                    <td>{{ data.Close }}</td>
+                    <td>{{ data.Volume }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

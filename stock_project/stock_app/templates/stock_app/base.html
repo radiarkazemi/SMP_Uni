@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}سایت بازار سهام{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazir:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1f2937; /* Trust - Dark Blue */
+            --secondary-color: #10b981; /* Money - Green */
+            --accent-color: #e3342f; /* Passion - Red */
+            --luxury-purple: #6b21a8; /* Luxury - Purple */
+            --luxury-black: #111827; /* Luxury - Black */
+            --luxury-gold: #d4af37; /* Luxury - Gold */
+            --background-color: #f9fafb; /* Light gray for a clean background */
+            --text-color: #111827; /* Dark text for readability */
+            --font-family: 'Vazir', sans-serif;
+            --font-size-body: 16px;
+            --font-size-heading: 28px;
+            --font-weight-normal: 400;
+            --font-weight-bold: 700;
+            --spacing-small: 8px;
+            --spacing-medium: 16px;
+            --spacing-large: 24px;
+        }
+
+        body {
+            font-family: var(--font-family);
+            font-size: var(--font-size-body);
+            color: var(--text-color);
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 0;
+            direction: rtl; /* Right-to-left layout for Persian */
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-medium);
+        }
+
+        header, footer {
+            background-color: var(--primary-color);
+            color: #fff;
+            padding: var(--spacing-medium) 0;
+            text-align: center;
+        }
+
+        header {
+            margin-bottom: var(--spacing-large);
+        }
+
+        footer {
+            margin-top: var(--spacing-large);
+        }
+
+        h1, h2, h3 {
+            font-size: var(--font-size-heading);
+            font-weight: var(--font-weight-bold);
+            margin-bottom: var(--spacing-medium);
+        }
+
+        p {
+            margin-bottom: var(--spacing-medium);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: var(--spacing-medium);
+        }
+
+        .col-6 {
+            grid-column: span 6;
+        }
+
+        .col-12 {
+            grid-column: span 12;
+        }
+
+        .button-primary {
+            background-color: var(--secondary-color);
+            color: #fff;
+            padding: var(--spacing-small) var(--spacing-medium);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: var(--font-weight-bold);
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .button-primary:hover {
+            background-color: #059669;
+        }
+
+        .button-secondary {
+            background-color: var(--accent-color);
+            color: #fff;
+            padding: var(--spacing-small) var(--spacing-medium);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: var(--font-weight-bold);
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .button-secondary:hover {
+            background-color: #cc1f1a;
+        }
+
+        .hero {
+            background: linear-gradient(to right, var(--secondary-color), var(--luxury-purple));
+            color: #fff;
+            padding: var(--spacing-large);
+            text-align: center;
+            margin-bottom: var(--spacing-large);
+            border-radius: 8px;
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: var(--spacing-small);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: var(--spacing-medium);
+        }
+
+        .section {
+            margin-bottom: var(--spacing-large);
+            background-color: #fff;
+            padding: var(--spacing-medium);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .featured-stocks .stock-list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--spacing-medium);
+            justify-content: center;
+        }
+
+        .featured-stocks .stock-item {
+            background-color: #fff;
+            padding: var(--spacing-medium);
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            text-align: center;
+        }
+
+        .featured-stocks .stock-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .overview {
+            text-align: center;
+        }
+
+        .overview ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .overview ul li {
+            display: inline-block;
+            margin: var(--spacing-small) var(--spacing-large);
+            padding: var(--spacing-medium);
+            background-color: var(--background-color);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            font-size: 1.1rem;
+            font-weight: var(--font-weight-normal);
+        }
+
+        .overview ul li:before {
+            content: "✔"; /* Add checkmark before each list item */
+            margin-left: 8px;
+            color: var(--secondary-color);
+        }
+
+        .overview h2 {
+            color: var(--primary-color);
+            margin-bottom: var(--spacing-large);
+        }
+
+        .testimonials {
+            text-align: center;
+        }
+
+        .testimonials .testimonial-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-medium);
+            justify-content: center;
+        }
+
+        .testimonials .testimonial-item {
+            background-color: #fff;
+            padding: var(--spacing-medium);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-width: 400px;
+            transition: transform 0.3s ease;
+            font-size: 1rem;
+            line-height: 1.5;
+            position: relative;
+        }
+
+        .testimonials .testimonial-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .testimonials .testimonial-item p {
+            font-style: italic;
+            margin-top: var(--spacing-large);
+        }
+
+        .testimonials .testimonial-item .author {
+            font-weight: var(--font-weight-bold);
+            margin-top: var(--spacing-small);
+        }
+
+        .testimonials .profile-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--secondary-color);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: var(--font-weight-bold);
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .call-to-action {
+            text-align: center;
+        }
+
+        .call-to-action a {
+            background-color: var(--luxury-gold);
+            color: #fff;
+            padding: var(--spacing-small) var(--spacing-medium);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: var(--font-weight-bold);
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .call-to-action a:hover {
+            background-color: #cba437;
+        }
+
+        .chart-container {
+            margin: var(--spacing-large) 0;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: var(--spacing-medium);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--spacing-large) 0;
+            font-size: var(--font-size-body);
+            text-align: left;
+        }
+
+        .data-table th, .data-table td {
+            border: 1px solid #ddd;
+            padding: var(--spacing-small);
+        }
+
+        .data-table th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .data-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .data-table tr:hover {
+            background-color: #ddd;
+        }
+
+        .data-table th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-medium);
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: var(--font-weight-bold);
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--secondary-color);
+        }
+
+        .form-group {
+            margin-bottom: var(--spacing-medium);
+        }
+
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        form label {
+            display: block;
+            margin-bottom: var(--spacing-small);
+            font-weight: var(--font-weight-bold);
+        }
+
+        form input, form textarea, form select {
+            width: 100%;
+            padding: var(--spacing-small);
+            margin-bottom: var(--spacing-medium);
+            border: 1px solid var(--primary-color);
+            border-radius: 4px;
+        }
+
+        form button {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: #fff;
+            padding: var(--spacing-small) var(--spacing-medium);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: var(--font-weight-bold);
+        }
+
+        @media (max-width: 768px) {
+            .featured-stocks .stock-list {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .testimonials .testimonial-list {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .featured-stocks .stock-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>سایت بازار سهام</h1>
+            <nav>
+                <a href="{% url 'landing' %}" class="button-secondary">خانه</a>
+                <a href="#" class="button-secondary">درباره ما</a>
+                <a href="{% url 'contact' %}" class="button-secondary">تماس با ما</a>
+                <a href="{% url 'register' %}" class="button-secondary">ثبت نام</a>
+                <a href="{% url 'login' %}" class="button-secondary">ورود</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 سایت بازار سهام. تمامی حقوق محفوظ است.</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,72 @@
+{% extends 'stock_app/base.html' %}
+
+{% block title %}صفحه اصلی{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h2>به سایت بازار سهام خوش آمدید</h2>
+    <p>پلتفرم یکپارچه شما برای تمام اطلاعات و تحلیل‌های بازار سهام.</p>
+    <a href="{% url 'select-stock' %}" class="button-primary">شروع کنید</a>
+</div>
+
+<div class="container">
+    <!-- Featured Stocks or Market News -->
+    <div class="section featured-stocks">
+        <h2>سهام‌های برجسته</h2>
+        <div class="stock-list">
+            <!-- Example content, this should be dynamic -->
+            <div class="stock-item">
+                <h3>Apple Inc. (AAPL)</h3>
+                <p>قیمت فعلی: $145.09</p>
+                <a href="{% url 'stock-data-uni-ticker' 'AAPL' %}" class="button-primary">مشاهده جزئیات</a>
+            </div>
+            <div class="stock-item">
+                <h3>Microsoft Corp. (MSFT)</h3>
+                <p>قیمت فعلی: $299.35</p>
+                <a href="{% url 'stock-data-uni-ticker' 'MSFT' %}" class="button-primary">مشاهده جزئیات</a>
+            </div>
+            <div class="stock-item">
+                <h3>Amazon.com Inc. (AMZN)</h3>
+                <p>قیمت فعلی: $3,251.08</p>
+                <a href="{% url 'stock-data-uni-ticker' 'AMZN' %}" class="button-primary">مشاهده جزئیات</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overview of Services or Features -->
+    <div class="section overview">
+        <h2>ویژگی‌های ما</h2>
+        <p>ما ابزارها و تحلیل‌های جامع را برای کمک به شما در تصمیم‌گیری‌های مطلعانه در بازار سهام ارائه می‌دهیم.</p>
+        <ul>
+            <li>داده‌های سهام در زمان واقعی</li>
+            <li>تحلیل‌ها و پیش‌بینی‌های پیشرفته</li>
+            <li>هشدارهای قابل تنظیم</li>
+            <li>اخبار و بروزرسانی‌های بازار</li>
+        </ul>
+    </div>
+
+    <!-- Testimonials or User Reviews -->
+    <div class="section testimonials">
+        <h2>نظرات کاربران ما</h2>
+        <div class="testimonial-list">
+            <div class="testimonial-item">
+                <div class="profile-icon">ج</div>
+                <p>"بهترین سایت بازار سهام که تاکنون استفاده کرده‌ام. توصیه می‌کنم!"</p>
+                <div class="author">- جان دو</div>
+            </div>
+            <div class="testimonial-item">
+                <div class="profile-icon">ج</div>
+                <p>"تحلیل‌های دقیق و پیش‌بینی‌های عالی. یک ابزار ضروری برای هر سرمایه‌گذار."</p>
+                <div class="author">- جین اسمیت</div>
+            </div>
+            <!-- Add more testimonials as needed -->
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="section call-to-action">
+        <h2>آماده برای شروع هستید؟</h2>
+        <a href="{% url 'select-stock' %}" class="button-primary">همین حالا شروع کنید</a>
+    </div>
+</div>
+{% endblock %}

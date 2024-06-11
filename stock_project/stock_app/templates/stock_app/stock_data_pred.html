@@ -1,94 +1,76 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Select Stock for Prediction Data</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{% static 'stock_app/style.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <script>
-        function submitForm() {
-            document.getElementById("stockForm").submit();
-        }
-    </script>
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="{% url 'landing' %}">Stock Prediction App</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'stock-data-uni' 'AAPL' %}">Stock Data</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'select-stock' %}">Predictions</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+{% extends 'stock_app/base.html' %}
 
-    <div class="container mt-5">
-        <div class="jumbotron text-center">
-            <h1 class="display-4">Stock Prediction Data</h1>
-            <form id="stockForm" method="post" class="form-inline justify-content-center">
-                {% csrf_token %}
-                <div class="form-group mx-sm-3 mb-2">
-                    {{ form.ticker }}
-                </div>
-                {% if error %}
-                    <div class="alert alert-danger mt-3">{{ error }}</div>
-                {% endif %}
-            </form>
-        </div>
+{% block title %}پیش‌بینی داده‌های سهام{% endblock %}
 
-        {% if stock_data %}
-            <h2 class="text-center">Stock Data for {{ ticker }}</h2>
-            <div class="table-responsive mt-4">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Jalali Date</th>
-                            <th>Gregorian Date</th>
-                            <th>Stock Value</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for entry in stock_data %}
-                            <tr>
-                                <td>{{ entry.Date }}</td>
-                                <td>{{ entry.Time }}</td>
-                                <td>{{ entry.jalali_date }}</td>
-                                <td>{{ entry.gregorian_date }}</td>
-                                <td>{{ entry.stock_value }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+{% block content %}
+<div class="container">
+    <!-- Stock Ticker Selection Form -->
+    <div class="section">
+        <h2>انتخاب نماد سهام</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="ticker">نماد سهام:</label>
+                {{ form.ticker }}
             </div>
-            {% if line_chart %}
-                <div class="chart-container mt-5">
-                    <h3 class="text-center">Stock Value Over Time</h3>
-                    {{ line_chart|safe }}
-                </div>
-            {% endif %}
-        {% endif %}
+            <div class="form-group">
+                <label for="prediction_days">تعداد روزهای پیش‌بینی:</label>
+                <input type="number" id="prediction_days" name="prediction_days" min="1" max="365" value="30">
+            </div>
+            <div class="form-group">
+                <label for="model_type">نوع مدل:</label>
+                <select id="model_type" name="model_type">
+                    <option value="LSTM">LSTM</option>
+                    <option value="ARIMA">ARIMA</option>
+                    <option value="Prophet">Prophet</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="additional_features">ویژگی‌های اضافی:</label>
+                <select id="additional_features" name="additional_features" multiple>
+                    <option value="volume">حجم معاملات</option>
+                    <option value="open_price">قیمت باز</option>
+                    <option value="high_price">قیمت بالا</option>
+                    <option value="low_price">قیمت پایین</option>
+                </select>
+            </div>
+            <button type="submit" class="button-primary">مشاهده پیش‌بینی‌ها</button>
+        </form>
     </div>
 
-    <footer class="footer mt-auto py-3 bg-dark text-white text-center">
-        <div class="container">
-            <span>&copy; 2024 Stock Prediction App. All rights reserved.</span>
+    {% if stock_data %}
+    <!-- Stock Data Display -->
+    <div class="section stock-data">
+        <h2>داده‌های پیش‌بینی برای {{ ticker }}</h2>
+        <div class="chart-container">
+            {{ line_chart|safe }}
         </div>
-    </footer>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html>
+        <div class="chart-container">
+            {{ dot_chart|safe }}
+        </div>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>تاریخ</th>
+                    <th>زمان</th>
+                    <th>تاریخ شمسی</th>
+                    <th>تاریخ میلادی</th>
+                    <th>ارزش سهام</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data in stock_data %}
+                <tr>
+                    <td>{{ data.Date }}</td>
+                    <td>{{ data.Time }}</td>
+                    <td>{{ data.jalali_date }}</td>
+                    <td>{{ data.gregorian_date }}</td>
+                    <td>{{ data.stock_value }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
